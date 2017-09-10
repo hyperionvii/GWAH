@@ -98,6 +98,11 @@ var users = require('./app/routes/auth');
       var cardModel = models.sequelize.import(path.join(__dirname, 'app/models/black-card'));
       WhiteCard = cardModelWhite;
       BlackCard = cardModel;
+
+      WhiteCard.destroy({where:{}});
+      BlackCard.destroy({where:{}});
+
+
       var arrayOfCards = [{
         "text": "In the seventh circle of Hell, sinners must endure ____ for all eternity."
         },
