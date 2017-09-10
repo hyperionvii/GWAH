@@ -324,7 +324,6 @@ $(document).ready(function() {
 	function whiteCardsGet() {
     $.get("/api/whitecards", function(data) {
 	    for (var i = 0; i < data.length; i++) {
-
 	      whiteCardsFromSql.push(data[i].text);
 	    }
 	    console.log(whiteCardsFromSql);

@@ -94,7 +94,7 @@ var users = require('./app/routes/auth');
 
     //Sync Database
    	models.sequelize.sync().then(function(){
-      var cardModelWhite = models.sequelize.import(path.join(__dirname, 'app/models/black-card'));
+      var cardModelWhite = models.sequelize.import(path.join(__dirname, 'app/models/white-card'));
       var cardModel = models.sequelize.import(path.join(__dirname, 'app/models/black-card'));
       WhiteCard = cardModelWhite;
       BlackCard = cardModel;
