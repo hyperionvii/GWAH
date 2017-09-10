@@ -14,7 +14,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var PORT = process.env.PORT || 3000
 
 
-var users = require('./routes/auth');
+var users = require('./app/routes/auth');
 
     //For BodyParser
     app.use(bodyParser.json());
@@ -32,6 +32,28 @@ var users = require('./routes/auth');
     app.use(passport.initialize());
     app.use(passport.session()); // persistent login sessions
 
+//views
+
+
+// const hbs = exphbs.create({
+//     extname      :'hbs',
+//     layoutsDir   : 'path/to/layout/directory',
+//     defaultLayout: 'main',
+//     helpers      : 'path/to/helpers/directory',
+//     partialsDir  : [
+//         path/to/partials/directory
+//     ]
+// });
+
+
+// var hbs = exphbs.create({
+//         extname: '.hbs',
+//         layoutsDir:'app/views/layouts',
+//         defaultLayout: 'layout', 
+//         partialsDir:'app/views'
+// });
+
+// app.set('view engine', '.hbs');
 
     app.set('views', path.join(__dirname, 'views'));
     app.engine('handlebars', exphbs({defaultLayout:'layout'}));
@@ -40,7 +62,7 @@ var users = require('./routes/auth');
     app.use(express.static(path.join(__dirname, 'public')));
 
   //Models
-    var models = require("./models");
+    var models = require("./app/models");
 
     app.use(expressValidator());
 
@@ -58,14 +80,14 @@ var users = require('./routes/auth');
 
 
     //Routes
-    var authRoute = require('./routes/auth.js')(app,passport);
+    var authRoute = require('./app/routes/auth.js')(app,passport);
     // app.use('/api', apiRoutes);
     //load passport strategies
-    require('./config/passport/passport.js')(passport,models.user);
+    require('./app/config/passport/passport.js')(passport,models.user);
 
     var apiRoutes = require('./app/routes/api-routes.js');
 
-    app.use('/auth', users);
+    // app.use('/auth', users);
     app.use('/api', apiRoutes);
 
     //Sync Database
