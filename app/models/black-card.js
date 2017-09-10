@@ -9,7 +9,9 @@ module.exports = function(sequelize, Sequelize) {
         text: {
             type: Sequelize.STRING,
             notEmpty: true
-        }
+        },    
+    }, {
+    timestamps: false
     });
 
 return BlackCard;

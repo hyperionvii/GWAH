@@ -8,9 +8,12 @@ module.exports = function(sequelize, Sequelize) {
 		email: { type:Sequelize.STRING, validate: {isEmail:true} },
 		password : {type: Sequelize.STRING,allowNull: false },
 		last_login: {type: Sequelize.DATE},
-    status: {type: Sequelize.ENUM('active','inactive'),defaultValue:'active' }
+    	status: {type: Sequelize.ENUM('active','inactive'),defaultValue:'active' }
 
-});
+		}, 
+		{
+        timestamps: false
+    });
 
 	 //  // Creating a custom method for our User model. This will check if an unhashed password entered by the user can be compared to the hashed password stored in our database
   // User.prototype.validPassword = function(password) {
