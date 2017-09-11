@@ -11,7 +11,8 @@ module.exports = function(sequelize, Sequelize) {
             notEmpty: true
         },    
     }, {
-    timestamps: false
+        
+        timestamps: false
     });
 
 return BlackCard;
