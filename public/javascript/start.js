@@ -83,21 +83,40 @@ $(document).ready(function() {
 	
 	});
 
+
+
+	//event listener for player points
+
+		ref.orderByChild("czar").equalTo(false).on("child_added", function(snapshot) {
+
+		  	userName = snapshot.key;
+		  	console.log(userName);
+
+		  	database.ref(userName).on("value", function(childSnapshot) {
+				points = childSnapshot.val().points;
+				if (points != 0) {
+					$("#username").html("Point Leader " + userName + " at " + points + " points!");
+				};
+			});
+
+		});
+
+
+
 	//event listener for once all players have played their card
 
 		database.ref("AllUsersPlayed").on("child_added", function(childSnapshot) {
 			if(childSnapshot.val().played == true) {
 				var query = firebase.database().ref("cardsPlayed").orderByKey();
-					query.once("value")
-							.then(function(snapshot) {
-							  	$('.band').html("<div class='item-7 card'> <div class='thumb'></div> <article> <p id='play2'>" + czarCardPlayed + "</p></article></div>");
+				query.once("value").then(function(snapshot) {
+					$('.band').html("<div class='item-7 card'> <div class='thumb'></div> <article> <p id='play2'>" + czarCardPlayed + "</p></article></div>");
 							    
-							    snapshot.forEach(function(childSnapshot) {
-							      var childData = childSnapshot.val().card;
-							      console.log(childData);
-								 $('.band').append("<div class='item-1 card'> <div class='thumb'></div> <article><p>" + childData + "</p></article></div>");
-						  		});
-							});
+					snapshot.forEach(function(childSnapshot) {
+						var childData = childSnapshot.val().card;
+						console.log(childData);
+					$('.band').append("<div class='item-1 card'> <div class='thumb'></div> <article><p>" + childData + "</p></article></div>");
+					});
+				});
 			}	
 		});
 
@@ -337,6 +356,14 @@ $(document).ready(function() {
 	    }
 	    console.log(cardsFromSql);
     	});
+  	};
+
+  	function restartGame() {
+  		//reset everything
+  	};
+
+  	function updateScoresToHTML() {
+
   	};
 
 });

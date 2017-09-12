@@ -176,3 +176,15 @@ footer{
     background: #000000;
     color: #ffffff;
 }
+
+#username {
+  float: left;
+}
+
+.register {
+  width: 90%;
+  max-width: 150px;
+  margin: 0 auto;
+  display: grid;
+  float: left;
+}
