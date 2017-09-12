@@ -35,26 +35,6 @@ var users = require('./app/routes/auth');
 //views
 
 
-// const hbs = exphbs.create({
-//     extname      :'hbs',
-//     layoutsDir   : 'path/to/layout/directory',
-//     defaultLayout: 'main',
-//     helpers      : 'path/to/helpers/directory',
-//     partialsDir  : [
-//         path/to/partials/directory
-//     ]
-// });
-
-
-// var hbs = exphbs.create({
-//         extname: '.hbs',
-//         layoutsDir:'app/views/layouts',
-//         defaultLayout: 'layout', 
-//         partialsDir:'app/views'
-// });
-
-// app.set('view engine', '.hbs');
-
     app.set('views', path.join(__dirname, 'views'));
     app.engine('handlebars', exphbs({defaultLayout:'layout'}));
     app.set('view engine', 'handlebars');

@@ -123,10 +123,10 @@ $(document).ready(function() {
 	//starts the game over again
 	
 	// if(czarSelected && czarCardPlayed) {
-		//update the screen with the user who received the point.
-		//possibly push user information and  
-		//display a button that allows all users to play again
-		//if all users decide to play again, restart the game by pushing everything new to firebase. 
+	// 	// update the screen with the user who received the point.
+	// 	// possibly push user information and  
+	// 	// display a button that allows all users to play again
+	// 	// if all users decide to play again, restart the game by pushing everything new to firebase. 
 
 	// }	  
 
