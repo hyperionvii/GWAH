@@ -80,18 +80,10 @@ $(document).ready(function() {
 				console.log(czarSelected);
 				$('.band').html("<div class='item-7 card'> <div class='thumb'></div> <article> <p id='play2'>" + czarCardPlayed + "</p></article></div>");
 				$('.band').append("<div class='item-1 card'> <div class='thumb'></div> <article> <p>" + czarSelected + "</p></article></div>");
-
-				// restartGame();
 			}
 		});
 	
 	});
-
-	//event listener for game restat
-	ref.orderByChild("playAgain").equalTo(true).on("child_added", function(snapshot) {
-		setTimeout(function() {restartGame()}, 5000);
-	});
-
 
 	//event listener for player points
 
@@ -103,7 +95,7 @@ $(document).ready(function() {
 		  	database.ref(userName).on("value", function(childSnapshot) {
 				uniquePoints = childSnapshot.val().points;
 				if (uniquePoints != 0) {
-					$("#username").append(userName + " point's are: " + uniquePoints);
+					$("#username").append(userName + " is awarded " + uniquePoints + " point!");
 				};
 			});
 
@@ -127,8 +119,6 @@ $(document).ready(function() {
 				});
 			}	
 		});
-
-
 
 	$("#user-count").html("Number Of Users: " + idCount)
 
@@ -236,50 +226,83 @@ $(document).ready(function() {
 
     	} else {
 
+    		var snapShotCardSelected
+
     		cardSelected = $(this).html();
 
-    		database.ref(user).once("value", function(snapshot) {  
-				database.ref().child(user).update({"selected": cardSelected});
+			database.ref(user).on("value", function(snapshot) {
+				snapShotCardSelected = snapshot.val().selected;
 			});
 
-			database.ref("cardsPlayed").push({
-				"card": cardSelected,
-			 });
+			if(snapShotCardSelected == cardSelected) {
+				alert("You have already played your card.  Please wait for the czar to selected the winning card");
+			} else if (!czarCardPlayed) {
+				alert("please wait for the czar to play his card")
+			} else {
+	    		//if not the czar selecting cards...
 
-			var userHasntPlayed = false;
-			ref.orderByChild("selected").equalTo(0).on("child_added", function(snapshot) {
-			  return userHasntPlayed = snapshot.key;
-			}); 
+	    		//save the selected card
 
-			database.ref(firebaseCzar).on("value", function(snapshot) {
-				czarCardPlayed = snapshot.val().czarCardPlayed;
-			});
+	    		// cardSelected = $(this).html();
 
-			if (typeof userHasntPlayed == 'string') {
-				var index = hand.indexOf(cardSelected);
-				hand.splice(index, 1);
-				push6CardsFromLocal(hand);
-				$('.band').html("<div class='item-7 card'> <div class='thumb'></div> <article> <p id='play2'>" + czarCardPlayed+ "</p></article></div>")
-				$('.band').append("<div class='item-1 card'> <div class='thumb'></div> <article> <p>" + cardSelected + "</p></article></div>");
-			} else if (userHasntPlayed == false) {
-				database.ref("AllUsersPlayed").push({
-					"played": true,
+	    		//update the user's selected card to firebase
+
+	    		database.ref(user).once("value", function(snapshot) {  
+					database.ref().child(user).update({"selected": cardSelected});
+				});
+
+				//update firebase with the card the user played - genera list.
+
+				database.ref("cardsPlayed").push({
+					"card": cardSelected,
 				 });
 
-				var query = firebase.database().ref("cardsPlayed").orderByKey();
-					query.once("value")
-					  .then(function(snapshot) {
-					  	$('.band').html("<div class='item-7 card'> <div class='thumb'></div> <article> <p id='play2'>" + czarCardPlayed + "</p></article></div>");
-					    
-					    snapshot.forEach(function(childSnapshot) {
-					      var childData = childSnapshot.val().card;
-					      console.log(childData);
-						 $('.band').append("<div class='item-1 card'> <div class='thumb'></div> <article> <p>" + childData + "</p></article></div>");
-					  });
+				//set the variable, userHasntPlayed to false
+
+				var userHasntPlayed = false;
+
+				//child listener that watches for any selected == 0
+
+				ref.orderByChild("selected").equalTo(0).on("child_added", function(snapshot) {
+				  return userHasntPlayed = snapshot.key;
+				}); 
+
+				//checks to see if the user has selected a card.
+
+				if (typeof userHasntPlayed == 'string') {
+					//finds the card the user selected (within the hand array), and removes it from their hand
+
+					var index = hand.indexOf(cardSelected);
+					hand.splice(index, 1);
+					// push6CardsFromLocal(hand)
+
+					//updates the screen with their selected card and the czar's card.
+					$('.band').html("<div class='item-7 card'> <div class='thumb'></div> <article> <p id='play2'>" + czarCardPlayed+ "</p></article></div>")
+					$('.band').append("<div class='item-1 card'> <div class='thumb'></div> <article> <p>" + cardSelected + "</p></article></div>");
+					console.log(userHasntPlayed);
+				
+				} else if (userHasntPlayed == false) {
+					console.log(userHasntPlayed);
+
+					database.ref("AllUsersPlayed").push({
+						"played": true,
+					 });
+
+					var query = firebase.database().ref("cardsPlayed").orderByKey();
+						query.once("value")
+						  .then(function(snapshot) {
+						  	$('.band').html("<div class='item-7 card'> <div class='thumb'></div> <article> <p id='play2'>" + czarCardPlayed + "</p></article></div>");
+						    
+						    snapshot.forEach(function(childSnapshot) {
+						      var childData = childSnapshot.val().card;
+						      console.log(childData);
+							 $('.band').append("<div class='item-1 card'> <div class='thumb'></div> <article> <p>" + childData + "</p></article></div>");
+						  });
 					});
 				}	
 			};
-	    });
+		};
+	});
 
 
   	$('.register').on('click', '#start', function() {
@@ -320,7 +343,7 @@ $(document).ready(function() {
 
 	function singleBlackCardPlayed() {
 
-		var indexOfCard =  Math.floor(Math.random() * (15 - 0 + 1)) + 0
+		var indexOfCard =  Math.floor(Math.random() * (11 - 0 + 1)) + 0
 
 		database.ref().once("value", function(childSnapshot) {
 			blackCard = childSnapshot.val().blackCards[indexOfCard];
@@ -352,92 +375,6 @@ $(document).ready(function() {
 	    console.log(cardsFromSql);
     	});
   	};
-
-  	// function restartGame() {
-
-  	// 	if(czarSelected) {
-  	// 		var playAgain = confirm("Would you like to play another round?");
-  	// 		//update firebase with player information
-  	// 		if(playAgain) {
-  				
-  	// 			database.ref("AllUsersPlayed").push({
-			// 		"played": false,
-			// 	 });
-
-  	// 			database.ref().child(user).update({"playAgain": true});
-
-	  // 			ref.orderByChild("playAgain").equalTo(true).once("child_added", function(snapshot) {
-			// 	  	var confirmedPlayers = [];
-			// 	  	confirmedPlayers.push(snapshot.key);
-
-			// 	  	if(confirmedPlayers.length == 4) {
-			// 	  		if (idCount == 4) {
-
-			// 	  			database.ref(user).set({
-			// 		        	"czarCardPlayed": 0, 
-			// 		        	"czarSelected": 0,
-			// 		        	"czar": true,
-			// 		        	"playAgain": false
-			// 		    	});
-
-			// 		   		czar = true;
-				  			
-			// 	  			database.ref("count").update({
-			// 					"idCount": 1
-			// 				});
-
-			// 				$('.register').append("<button type='submit' class='btn btn-default' id='start'> Czar Card </button>")
-			// 				$('.band').html("<div class='item-7 card'> <div class='thumb'></div> <article> <p id='play2'> When Player Count Reaches 4, Please Play Your Card! </p></article></div>")
-
-			// 	  		} else if (idCount < 4) {
-
-			// 				for(var i = 0; i < 4; i++) {
-
-			// 					database.ref("count").update({
-			// 						"idCount": idCount + 1
-			// 				});
-
-			// 					database.ref(confirmedPlayers[i]).once("value", function(snapshot) {
-			// 						points = snapshot.val().points;
-			// 					});
-
-			// 					database.ref(confirmedPlayers[i]).set({
-			// 				        "hand": 0,
-			// 				        "selected": 0, 
-			// 				        "points": points, 
-			// 				        "czar": false,
-			// 				        "playAgain": false
-			// 				    });
-
-			// 				    database.ref().once("value", function(childSnapshot) {
-			// 						whiteCards = childSnapshot.val().whiteCards;
-			// 						console.log(whiteCards);
-			// 						hand = [whiteCards[0], whiteCards[1], whiteCards[2], whiteCards[3], whiteCards[4], whiteCards[5]];
-			// 						whiteCards.splice(0,6)
-			// 						database.ref().update({"whiteCards": whiteCards});
-			// 						push6CardsFromLocal(hand);
-			// 						dealtHandAppearsOnScreen();
-			// 					});
-
-			// 					database.ref(confirmedPlayers[i]).once("value", function(snapshot) {
-			// 						database.ref().child(confirmedPlayers[i]).update({"points": points})
-			// 					 });
-			// 				}
-			// 			}
-			// 	  	} else {
-			// 	  		alert("Please wait for other players")
-			// 	  	}			 
-			// 	});
-  	// 		} else if (false) {
-  	// 			ref.orderByChild("playAgain").equalTo(true).once("child_added", function(snapshot) {
-  	// 				alert("A Player has chosen to not player another round. Game Over!");
-  	// 			});
-  	// 			ref.orderByChild("playAgain").equalTo(false).once("child_added", function(snapshot) {
-  	// 				alert("A Player has chosen to not player another round. Game Over!");
-  	// 			});
-  	// 		};
-  	// 	};
-  	// };
 
 });
 

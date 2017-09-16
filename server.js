@@ -87,25 +87,16 @@ var users = require('./app/routes/auth');
             "text": "In the seventh circle of Hell, sinners must endure ____ for all eternity."
             },
             {
-            "text": "After months of practice with ____, I think I'm finally ready for ____."
-            },
-            {
             "text": "The blind date was going horribly until we discovered our shared interest in ____."
             },
             {
             "text": "____. Awesome in theory, kind of a mess in practice."
             },
             {
-            "text": "With enough time and pressure, ____ will turn into ____."
-            },
-            {
             "text": "I'm not like the rest of you. I'm too rich and busy for ____."
             },
             {
             "text": "And what did *you* bring for show and tell?"
-            },
-            {
-            "text": "Having problems with ____? Try ____!"
             },
             {
             "text": "As part of his contract, Prince won't perform without ____ in his dressing room."
@@ -318,32 +309,6 @@ var users = require('./app/routes/auth');
     }).catch(function(err){
         console.log(err,"Something went wrong with the Database Update!")
     });
-
-
-    // modelBlackCard.sequelize.sync().then(function(){
-    //   blackCard.create({
-    //     id: 1,
-    //     text: 'In the seventh circle of Hell, sinners must endure ____ for all eternity.'
-    //   }).success(function (data) {
-    //     console.log(data.values)
-  // (2,'After months of practice with ____, I think I\'m finally ready for ____.'),
-  // (3,'The blind date was going horribly until we discovered our shared interest in ____.'),
-  // (4,'____. Awesome in theory, kind of a mess in practice.'),
-  // (5,'With enough time and pressure, ____ will turn into ____.'),
-  // (6,'I\'m not like the rest of you. I\'m too rich and busy for ____.'),
-  // (7,'And what did <i>you</i> bring for show and tell?'),
-  // (8,'Having problems with ____? Try ____!'),
-  // (9,'As part of his contract, Prince won\'t perform without ____ in his dressing room.'),
-  // (10,'How did I lose my virginity?'),
-  // (11,'Here is the church<br>Here is the steeple<br>Open the doors<br>And there is ____.'),
-  // (12,'During his childhood, Salvador Dalí produced hundreds of paintings of ____.'),
-  // (13,'In 1,000 years, when paper money is a distant memory, how will we pay for goods and services?'),
-  // (14,'What don\'t you want to find in your Kung Pao chicken?'),
-  // (15,'The Smithsonian Museum of Natural History has just opened an exhibit on ____.');
-        // console.log('Nice! Database looks fine')
-    //   })
-    // });
-
 
 
 	app.listen(PORT, function(err){
